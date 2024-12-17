@@ -1,73 +1,97 @@
-﻿<UserControl x:Class="PokemonMonster.Views.LoginView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewModel="clr-namespace:PokemonMonster.ViewModels"
-             xmlns:local="clr-namespace:PokemonMonster.Views"
-             xmlns:customcontrols="clr-namespace:PokemonMonster.CustomControls"
-             mc:Ignorable="d">
+﻿<Window x:Class="PokemonMonster.Views.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:PokemonMonster.ViewModels"
+        xmlns:local="clr-namespace:PokemonMonster.Views"
+        xmlns:customcontrols="clr-namespace:PokemonMonster.CustomControls"
+        mc:Ignorable="d"
+        WindowState="Maximized"
+        Background="#F5F5F5" Title="Connexion">
 
-    <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-    </UserControl.Resources>
+    <Window.DataContext>
+        <viewModel:LoginViewModel />
+    </Window.DataContext>
 
-    <Grid Background="#F0F0F0" Margin="10">
-        <TextBlock Text="Connexion" 
-                   FontSize="20" 
-                   FontWeight="Bold" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Top" 
-                   Margin="0,10,0,0"/>
+    <Window.Resources>
+        <!-- Style des boutons -->
+        <Style TargetType="Button" x:Key="NavButtonStyle">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="#007ACC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" BlurRadius="5" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#005B99"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#B0C4DE"/>
+                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-        <TextBlock Text="Nom d'utilisateur" 
-                   Margin="10,60,10,0" 
-                   VerticalAlignment="Top" 
-                   FontSize="14"/>
-        <TextBox Name="UsernameTextBox" 
-                 Margin="10,85,10,0" 
-                 VerticalAlignment="Top" 
-                 Height="30" 
-                 FontSize="14" 
-                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+        <!-- Style des champs de texte et mot de passe -->
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="#007ACC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="10,5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
 
-        <TextBlock Text="Mot de passe" 
-                   Margin="10,130,10,0" 
-                   VerticalAlignment="Top" 
-                   FontSize="14" />
+        <Style TargetType="PasswordBox">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="#007ACC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="10,5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+    </Window.Resources>
 
-        <customcontrols:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                            Margin="10,155,10,0" 
-                                            VerticalAlignment="Top" 
-                                            Height="30" 
-                                            FontSize="14"/>
+    <Grid Margin="40">
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Height="auto">
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
+                <TextBlock Text="Connexion" FontSize="60" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#333333"/>
 
-        <TextBlock Text="{Binding ErrorMessage}"
-                   Foreground="Red"
-                   Margin="10,130,10,0" 
-                   HorizontalAlignment="Center"
-                   FontSize="14" 
-                   TextWrapping="Wrap"/>
+                <TextBlock Text="Nom d'utilisateur" FontSize="20" HorizontalAlignment="Left" Margin="10,0"/>
+                <TextBox Name="UsernameTextBox" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Width="500" Height="40"/>
 
-        <Button Content="Se connecter" 
-                Width="150" 
-                Height="40" 
-                Margin="0,220,0,0" 
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Top"
-                FontSize="16"
-                Background="#007ACC" 
-                Foreground="White"
-                Command="{Binding LoginCommand}"/>
+                <TextBlock Text="Mot de passe" FontSize="20" HorizontalAlignment="Left" Margin="10,0"/>
+                <customcontrols:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="500" Height="50"/>
 
-        <Button Content="Créer un compte"
-                Width="150" 
-                Height="40" 
-                Margin="0,280,0,0" 
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Top"
-                FontSize="14"
-                Command="{Binding NavigateRegisterCommand}"/>
-        <ContentControl Content="{Binding Navigation.CurrentView}"></ContentControl>
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" FontSize="14" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+
+                <Button Content="Se connecter" Style="{StaticResource NavButtonStyle}" Command="{Binding LoginCommand}" Width="300" Height="50"/>
+                <Button Content="Créer un compte" Style="{StaticResource NavButtonStyle}" Click="NavigateToRegisterClick" Width="300" Height="50"/>
+            </StackPanel>
+        </Grid>
     </Grid>
-</UserControl>
+</Window>

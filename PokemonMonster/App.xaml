@@ -4,15 +4,6 @@
              xmlns:local="clr-namespace:PokemonMonster"
              xmlns:viewModel="clr-namespace:PokemonMonster.ViewModels"
              xmlns:view="clr-namespace:PokemonMonster.Views">
-    <Application.Resources>
-        <DataTemplate DataType="{x:Type TypeName=viewModel:LoginViewModel}">
-            <view:LoginView/>
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type TypeName=viewModel:RegisterViewModel}">
-            <view:RegisterView/>
-        </DataTemplate>
-    </Application.Resources>
 </Application>
 
 

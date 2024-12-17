@@ -10,16 +10,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using PokemonMonster.ViewModels;
+using System.Windows;
 
 namespace PokemonMonster.Views
 {
-    public partial class RegisterView : UserControl
+    public partial class RegisterView : Window
     {
         public RegisterView()
         {
             InitializeComponent();
+        }
+        private void NavigateToLoginClick(object sender, RoutedEventArgs e)
+        {
+            var loginView = new LoginView();
+            Application.Current.MainWindow = loginView;
+            loginView.Show();
+            this.Close();
         }
     }
 }

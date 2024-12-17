@@ -6,11 +6,12 @@ using System.Security;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using PokemonMonster.Models;
 using PokemonMonster.Repositories;
-using PokemonMonster.Services;
+using PokemonMonster.Views;
 
 namespace PokemonMonster.ViewModels
 {
@@ -22,12 +23,6 @@ namespace PokemonMonster.ViewModels
         private string _errorMessage;
         private bool _isViewVisible = true; 
         private IUserRepository userRepository;
-        private INavigationService _navigation;
-        public INavigationService Navigation
-        {
-            get { return _navigation; }
-            set { _navigation = value; OnPropertyChange(); }
-        }
 
         //Properties
         public string Username
@@ -53,21 +48,13 @@ namespace PokemonMonster.ViewModels
 
         //Commands
         public ICommand LoginCommand { get; }
-        public RelayCommand NavigateRegisterCommand { get; set; }
+        //public RelayCommand NavigateRegisterCommand { get; set; }
 
         //Constructors
         public LoginViewModel() 
         {
             userRepository = new UserRepository();
             LoginCommand = new ViewModelCommand(ExectueLoginCommand, CanExecuteLoginCommand);
-        }
-        public LoginViewModel(INavigationService navService)
-        {
-            userRepository = new UserRepository();
-            LoginCommand = new ViewModelCommand(ExectueLoginCommand, CanExecuteLoginCommand);
-            Navigation = navService;
-            NavigateRegisterCommand = new RelayCommand(execute: () => { Navigation.NavigateTo<RegisterViewModel>(); }, 
-                                                       canExecute: () => true);
         }
 
         //Methods
@@ -90,6 +77,16 @@ namespace PokemonMonster.ViewModels
                 Thread.CurrentPrincipal = new GenericPrincipal(
                     new GenericIdentity(Username), null);
                 IsViewVisible = false;
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var monsterListView = new MonsterListView();
+                    monsterListView.DataContext = new MonsterListViewModel(); 
+                    Application.Current.MainWindow = monsterListView;
+                    monsterListView.Show();
+                });
+
+                CloseLoginWindow();
             }
             else
             {
@@ -97,10 +94,16 @@ namespace PokemonMonster.ViewModels
             }
         }
 
-        public override bool Equals(object? obj)
+        private void CloseLoginWindow()
         {
-            return obj is LoginViewModel model &&
-                   EqualityComparer<INavigationService>.Default.Equals(Navigation, model.Navigation);
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is LoginView)
+                {
+                    window.Close();
+                    break;
+                }
+            }
         }
     }
 }

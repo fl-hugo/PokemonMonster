@@ -1,0 +1,197 @@
+﻿<Window x:Class="PokemonMonster.Views.BattleView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Battle" Height="800" Width="1000" WindowState="Maximized">
+
+    <Window.Resources>
+        <Style x:Key="SpellButtonStyle" TargetType="Button">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Background" Value="#FFDDDDFF"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="8">
+                            <Grid>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFAAAAFF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.Background>
+                <ImageBrush ImageSource="https://pokemonrevolution.net/forum/uploads/monthly_2021_03/DVMT-6OXcAE2rZY.jpg.afab972f972bd7fbd4253bc7aa1cf27f.jpg"></ImageBrush>
+            </Grid.Background>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Button Content="Quitter le combat" Margin="10" Click="QuitGameClick" Height="30" Width="110" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="300, 50">
+                <Image Source="{Binding PlayerPokemon.ImageUrl}" Width="250" Height="250" />
+                <TextBlock Text="{Binding PlayerPokemon.Name}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" />
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Border Width="206" Height="26" BorderBrush="Black" BorderThickness="3" CornerRadius="5">
+                        <ProgressBar Width="200" Height="20" Minimum="0" Maximum="{Binding PlayerPokemon.MaxHp}" 
+                                     Value="{Binding PlayerPokemon.Hp}" Foreground="Green" Background="LightGray">
+                            <ProgressBar.Style>
+                                <Style TargetType="ProgressBar">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PlayerHpPercent}" Value="10">
+                                            <Setter Property="Foreground" Value="DarkRed" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding PlayerHpPercent}" Value="50">
+                                            <Setter Property="Foreground" Value="Orange" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ProgressBar.Style>
+                        </ProgressBar>
+                    </Border>
+                    <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold">
+                        <Run Text="{Binding PlayerPokemon.Hp}" />
+                        <Run Text=" / " />
+                        <Run Text="{Binding PlayerPokemon.MaxHp}" />
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="375, 80">
+                <Image Source="{Binding OpponentPokemon.ImageUrl}" Width="250" Height="250" />
+                <TextBlock Text="{Binding OpponentPokemon.Name}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" />
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Border Width="206" Height="26" BorderBrush="Black" BorderThickness="3" CornerRadius="5">
+                        <ProgressBar Width="200" Height="20" Minimum="0" Maximum="{Binding OpponentPokemon.MaxHp}" 
+                                     Value="{Binding OpponentPokemon.Hp}" Foreground="Green" Background="LightGray">
+                            <ProgressBar.Style>
+                                <Style TargetType="ProgressBar">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding OpponentHpPercent}" Value="10">
+                                            <Setter Property="Foreground" Value="DarkRed" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding OpponentHpPercent}" Value="50">
+                                            <Setter Property="Foreground" Value="Orange" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ProgressBar.Style>
+                        </ProgressBar>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+
+            <TextBox Text="{Binding CombatMessages}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                     IsReadOnly="True" BorderBrush="LightGray" BorderThickness="1" FontSize="16" FontFamily="Segoe UI" 
+                     FontWeight="SemiBold" Margin="10, 10, 10, 10" Height="40" AcceptsReturn="True" TextWrapping="Wrap" 
+                     VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="AliceBlue" Padding="10, 5" 
+                     TextAlignment="Center" Foreground="MidnightBlue"> 
+                <TextBox.Resources>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="DodgerBlue"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="LightCyan"/>
+                                <Setter Property="BorderBrush" Value="DodgerBlue"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.Background>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Grid ClipToBounds="True">
+                            <Image Source="../Images/AttacksBackground.jpg">
+                                <Image.Effect>
+                                    <BlurEffect Radius="50"/>
+                                </Image.Effect>
+                            </Image>
+                        </Grid>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Grid.Background>
+
+            <Grid Margin="100, 50">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource SpellButtonStyle}" Command="{Binding CastSpellCommand}" CommandParameter="{Binding PlayerPokemon.Spells[0]}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding PlayerPokemon.Spells[0].Name}" HorizontalAlignment="Center" />
+                        <TextBlock HorizontalAlignment="Center">
+                            <Run Text="{Binding PlayerPokemon.Spells[0].Damage}" />
+                            <Run Text="damage" />
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource SpellButtonStyle}" Command="{Binding CastSpellCommand}" CommandParameter="{Binding PlayerPokemon.Spells[1]}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding PlayerPokemon.Spells[1].Name}" HorizontalAlignment="Center" />
+                        <TextBlock HorizontalAlignment="Center">
+                            <Run Text="{Binding PlayerPokemon.Spells[1].Damage}" />
+                            <Run Text="damage" />
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource SpellButtonStyle}" Command="{Binding CastSpellCommand}" CommandParameter="{Binding PlayerPokemon.Spells[2]}"> 
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding PlayerPokemon.Spells[2].Name}" HorizontalAlignment="Center" />
+                        <TextBlock HorizontalAlignment="Center">
+                            <Run Text="{Binding PlayerPokemon.Spells[2].Damage}" />
+                            <Run Text="damage" />
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource SpellButtonStyle}" Command="{Binding CastSpellCommand}" CommandParameter="{Binding PlayerPokemon.Spells[3]}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding PlayerPokemon.Spells[3].Name}" HorizontalAlignment="Center" />
+                        <TextBlock HorizontalAlignment="Center">
+                            <Run Text="{Binding PlayerPokemon.Spells[3].Damage}" />
+                            <Run Text="damage" />
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

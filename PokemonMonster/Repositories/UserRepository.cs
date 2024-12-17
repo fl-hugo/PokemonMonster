@@ -13,6 +13,7 @@ namespace PokemonMonster.Repositories
 {
     public class UserRepository : RepositoryBase, IUserRepository
     {
+        //public UserRepository(string connectionString) : base(connectionString) { }
         public void Add(UserModel userModel)
         {
             using (var connection = GetConnection())

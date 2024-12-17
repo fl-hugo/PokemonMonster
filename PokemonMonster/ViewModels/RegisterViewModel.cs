@@ -5,7 +5,6 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using PokemonMonster.Models;
 using PokemonMonster.Repositories;
-using PokemonMonster.Services;
 
 namespace PokemonMonster.ViewModels
 {
@@ -17,12 +16,6 @@ namespace PokemonMonster.ViewModels
         private SecureString _confirmPassword;
         private string _errorMessage;
         private IUserRepository _userRepository;
-        private INavigationService _navigation;
-        public INavigationService Navigation
-        {
-            get { return _navigation; }
-            set { _navigation = value; OnPropertyChange(); }
-        }
 
         //Properties
         public string Username
@@ -59,14 +52,6 @@ namespace PokemonMonster.ViewModels
             _userRepository = new UserRepository();
             RegisterCommand = new ViewModelCommand(ExecuteRegisterCommand, CanExecuteRegisterCommand);
         }
-        public RegisterViewModel(INavigationService navService)
-        {
-            _userRepository = new UserRepository();
-            RegisterCommand = new ViewModelCommand(ExecuteRegisterCommand, CanExecuteRegisterCommand);
-            Navigation = navService;
-            NavigateLoginCommand = new RelayCommand(execute: () => { Navigation.NavigateTo<LoginViewModel>(); },
-                                                       canExecute: () => true);
-        }
 
         //Methods
         private bool CanExecuteRegisterCommand(object obj)
@@ -89,7 +74,7 @@ namespace PokemonMonster.ViewModels
                 _userRepository.Add(new UserModel
                 {
                     Username = Username,
-                    Password = new NetworkCredential(string.Empty, Password).Password // Convert SecureString
+                    Password = new NetworkCredential(string.Empty, Password).Password
                 });
                 ErrorMessage = "Inscription réussie.";
             }
@@ -105,12 +90,6 @@ namespace PokemonMonster.ViewModels
             var b1 = new NetworkCredential(string.Empty, s1).Password;
             var b2 = new NetworkCredential(string.Empty, s2).Password;
             return b1 == b2;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return obj is RegisterViewModel model &&
-                   EqualityComparer<INavigationService>.Default.Equals(Navigation, model.Navigation);
         }
     }
 }
